@@ -45,7 +45,8 @@ int getNumberOfDays(int month, int year){
     //     return -1;
     // }
     if (month<=7){
-        if(month%2 == 0)
+        if(month%2 == 0) {
+	}
     }
 }
 
