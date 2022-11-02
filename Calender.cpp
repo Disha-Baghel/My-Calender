@@ -1,4 +1,5 @@
 #include<iostream>
+
 using namespace std;
 class Calender{
     int date;
@@ -45,8 +46,26 @@ int getNumberOfDays(int month, int year){
     //     return -1;
     // }
     if (month<=7){
-        if(month%2 == 0) {
-	}
+        if(month%2 == 0 && month != 2) {
+           return 30;
+	    }
+        else if (month == 2){
+            if(checkLeapYear()==1)
+                return 29;
+            else
+                return 28;
+        }
+        else{
+            return 31;
+        }
+    }
+    else{
+        if(month%2 == 0){
+            return 31;
+        }
+        else{
+            return 30;
+        }
     }
 }
 
