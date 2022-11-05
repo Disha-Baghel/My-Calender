@@ -2,6 +2,8 @@
 //#include "dayOfWeek.h"
 
 using namespace std;
+int getNumberOfDays(int , int);
+int getDayNumber(int, int ,int);
 class Calender{
     int date;
     int month;
@@ -78,7 +80,7 @@ class Calender{
             return ;
         } 
         if(!(year >=1600)){
-            cout<<"Invalid Month";
+            cout<<"Invalid Year";
             return ;
         }
         printDate();
@@ -106,6 +108,19 @@ class Calender{
             break;
             case 4: 
             x = x + 16;
+            cnt = 5;
+            break;
+            case 5:
+            x = x + 20;
+            cnt = 6;
+            break;
+            case 6:
+            x = x + 24;
+            cnt = 7;
+            break;
+            default:
+            cout<<"Invalid Data ";
+            return ;
         }
 
     }
