@@ -1,5 +1,6 @@
 #include<iostream>
 #include<fstream>
+#include<string>
 //#include "dayOfWeek.h"
 
 using namespace std;
@@ -80,7 +81,7 @@ class Calender{
             cout<<"Invalid Month";
             return ;
         } 
-        if(!(year >=1600)){
+        if(!(year >= 1600)){
             cout<<"Invalid Year";
             return ;
         }
@@ -103,36 +104,19 @@ class Calender{
     }
 
     void addnote(){
-    //     FILE *fp;
-    //     ofstream fout;
-        
-    // fp = fopen("note.dat","ab+");
-    // system("cls");
-    // printf("Enter the date(DD/MM): ");
-    // scanf("%d%d",&R.dd, &R.mm);
-   
-    // printf("Enter the Note(50 character max): ");
-    // fflush(stdin);
-    // scanf("%[^\n]",R.note);
-    // if(fwrite(&R,sizeof(R),1,fp)){
-    //     gotoxy(5,12);
-    //     puts("Note is saved sucessfully");
-    //     fclose(fp);
-    // }else{
-        
-    //     puts("\aFail to save!!\a");
-        
-    // }
     
-    // printf("Press any key............");
-    
-    // fclose(fp);
     string line;
     ofstream fout;
     fout.open("note.txt");
+    cout<<"Enter date (DD MM YYYY) : ";
+    cin>>date>>month>>year;
+    fout<<date<<" ";
+    printDate();
+    cout<<endl;
     while(fout){
         getline(cin, line);
-        if(line == "-1");
+        fout<<line;
+        if(line == ".")
         break;
     }
     cout<<"note saved successfully";
@@ -174,41 +158,12 @@ int getNumberOfDays(int month, int year){
     }
 }
 
-int getDayNumber(int date, int month, int year){
-    int rem = 0, t1, t2, y = year;
-    year = year - 1600;
-    while (year >= 100)
-    {
-        rem = rem + 5;
-        year = year - 100;
-    }
-    rem = rem%7;
-    t1 = (year-1)/4;
-    t2 = year-1-t1;
-    t1 = t1*2 + t2;
-    t1 = t1%7;
-    rem = rem + t1;
-    rem = rem % 7;
-    t2 = 0;
-    for(t1 = 1; t1<month; t1++){
-        t2 += getNumberOfDays(t1, y);
-    }
-    t2 = t2 + date;
-    t2 = t2 % 7;
-    rem = rem + t2;
-    rem = rem % 7;
-    if(y > 2000)
-        rem = rem + 1;
-    rem = rem % 7;
-    return rem;
-}
-
 void showNote(){
     string line;
     ifstream fin;
     fin.open("note.txt");
     while(getline(fin, line)){
-        if(line==NULL){
+        if(line==" "){
             
         }
         cout<<line<<endl;
@@ -244,11 +199,11 @@ int main(){
             cout<<"Press 'n' to Next, Press 'p' to Previous or Press 'q' to Quit"<<endl;
             cin>>ch;
             if(ch=='n'){
-                increase_month();
+                //increase_month();
                 calender.printMonth();
             }
             else if(ch=='p'){
-                decrease_month();
+                //decrease_month();
                 calender.printMonth();
             }
             else if(ch=='s'){
