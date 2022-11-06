@@ -1,4 +1,5 @@
 #include<iostream>
+#include<fstream>
 //#include "dayOfWeek.h"
 
 using namespace std;
@@ -8,6 +9,7 @@ class Calender{
     int date;
     int month;
     int year;
+    int firstDay;
     public:
     void setData(int date, int month, int year){
         this->date = date;
@@ -34,6 +36,7 @@ class Calender{
     int j = year / 100;
     int h = q + 13 * (m + 1) / 5 + k + k / 4 + j / 4 + 5 * j;
     h = h % 7;
+    firstDay = h;
     switch (h) {
         case 0:
         return "Saturday";
@@ -54,7 +57,7 @@ class Calender{
     }
 
     void printDate(){
-        cout<<"-----------------\n";
+        cout<<"----------------\n";
         switch(month){
             case 1: cout<<"January"; break;
             case 2: cout<<"February"; break;
@@ -69,12 +72,10 @@ class Calender{
             case 11: cout<<"November"; break;
             case 12: cout<<"December"; break;
         }
-        cout<<", "<<year;
-        cout<<"\n---------------------\n";
+        cout<<", "<<year<<endl;
     }
 
-    void printMonth(int x, int y){
-        int nod, day, cnt, d = 1, x1 = x, y1 = y, isNote = 0;
+    void printMonth(){
         if(!(month>=1 && month<=12)){
             cout<<"Invalid Month";
             return ;
@@ -84,44 +85,58 @@ class Calender{
             return ;
         }
         printDate();
-        y += 3;
-        cout<<"S    M    T    W    Th    F    S\n";
-        y++;
-        nod = getNumberOfDays(month, year);
-        day = getDayNumber(d, month, year);
-        switch(day){
-            case 0: 
-            x=x;
-            cnt =1;
-            break;
-            case 1: 
-            x = x + 4;
-            cnt = 2;
-            break;
-            case 2: 
-            x = x + 8;
-            cnt = 3;
-            break;
-            case 3:
-            x = x + 12;
-            cnt = 4;
-            break;
-            case 4: 
-            x = x + 16;
-            cnt = 5;
-            break;
-            case 5:
-            x = x + 20;
-            cnt = 6;
-            break;
-            case 6:
-            x = x + 24;
-            cnt = 7;
-            break;
-            default:
-            cout<<"Invalid Data ";
-            return ;
+        Zellercongruence();
+        cout<<"----------------------------------------------------"<<endl;
+        cout<<"S\tM\tT\tW\tTh\tF\tS\n";
+        cout<<"----------------------------------------------------"<<endl;
+
+        for(int i = 1; i < firstDay; i++){
+            cout<<"\t";
         }
+        for(int j = 1; j<=getNumberOfDays(month, year); j++){
+            if(((j+firstDay-2)%7==0) && (j!=1))
+                cout<<endl;
+            cout<<j<<"\t";
+        }
+        cout<<endl;
+        cout<<"----------------------------------------------------\n";
+    }
+
+    void addnote(){
+    //     FILE *fp;
+    //     ofstream fout;
+        
+    // fp = fopen("note.dat","ab+");
+    // system("cls");
+    // printf("Enter the date(DD/MM): ");
+    // scanf("%d%d",&R.dd, &R.mm);
+   
+    // printf("Enter the Note(50 character max): ");
+    // fflush(stdin);
+    // scanf("%[^\n]",R.note);
+    // if(fwrite(&R,sizeof(R),1,fp)){
+    //     gotoxy(5,12);
+    //     puts("Note is saved sucessfully");
+    //     fclose(fp);
+    // }else{
+        
+    //     puts("\aFail to save!!\a");
+        
+    // }
+    
+    // printf("Press any key............");
+    
+    // fclose(fp);
+    string line;
+    ofstream fout;
+    fout.open("note.txt");
+    while(fout){
+        getline(cin, line);
+        if(line == "-1");
+        break;
+    }
+    cout<<"note saved successfully";
+    fout.close();
 
     }
 
@@ -161,7 +176,6 @@ int getNumberOfDays(int month, int year){
 
 int getDayNumber(int date, int month, int year){
     int rem = 0, t1, t2, y = year;
-    // calender.getYear() = calender.getYear() - 1000;
     year = year - 1600;
     while (year >= 100)
     {
@@ -189,36 +203,18 @@ int getDayNumber(int date, int month, int year){
     return rem;
 }
 
-// const char* getName(int day){
-//     switch (day){
-//         case 3: return "Sunday";
-//         case 4: return "Monday";
-//         case 5: return "Tuesday";
-//         case 6: return "Wednesday";
-//         case 7: return "Thursday";
-//         case 1: return "Friday";
-//         case 2: return "Saturday";
-//         default: return "Error";
-//     }
-// }
-
-// const char *getDay(){
-//     int d = 0;
-//     if(calender.getMonth()<1 && calender.getMonth()>12){
-//         return ("invalid month");
-//     }
-//     if(calender.getDate()<1 && calender.getDate()>getNumberOfDays(calender.getMonth(), calender.getYear())){
-//         return ("Invalid Date");
-//     }
-//     if(calender.getYear()>=1000){
-//         d = getDayNumber(calender.getDate(), calender.getMonth(), calender.getYear());
-//         d = d%7;
-//         return (getName(d));
-//     }
-//     else{
-//         return ("Please give year more 1000");
-//     }
-// }
+void showNote(){
+    string line;
+    ifstream fin;
+    fin.open("note.txt");
+    while(getline(fin, line)){
+        if(line==NULL){
+            
+        }
+        cout<<line<<endl;
+    }
+    fin.close();
+}
 
 int main(){
     int choice;
@@ -242,11 +238,29 @@ int main(){
     case 2: 
         cout<<"Enter month and year (MM YYYY) : ";
         cin>>month>>year;
+        calender.setData(1, month, year);
         while(ch != 'q'){
-            calender.printMonth(20, 5);
+            calender.printMonth();
+            cout<<"Press 'n' to Next, Press 'p' to Previous or Press 'q' to Quit"<<endl;
+            cin>>ch;
+            if(ch=='n'){
+                increase_month();
+                calender.printMonth();
+            }
+            else if(ch=='p'){
+                decrease_month();
+                calender.printMonth();
+            }
+            else if(ch=='s'){
+                showNote();
+            }
         }
-
-    default:
+        break;
+        case 3:
+        calender.addnote();
+        break;
+    default: 
         ;
     }
 }
+    
