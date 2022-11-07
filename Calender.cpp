@@ -1,6 +1,8 @@
 #include<iostream>
 #include<fstream>
 #include<string>
+
+//#include"month.h"
 //#include "dayOfWeek.h"
 
 using namespace std;
@@ -23,11 +25,11 @@ class Calender{
     void setYear(){ this->year = this->year - 1000; }
 
     const char* Zellercongruence(){
-    if (month == 1) {
+    if (month == 1){
         month = 13;
         year--;
     }
-    if (month == 2) {
+    if (month == 2){
         month = 14;
         year--;
     }
@@ -76,7 +78,22 @@ class Calender{
         cout<<", "<<year<<endl;
     }
 
-    void printMonth(){
+    void showNote(){
+        string line;
+        char c;
+        ifstream fin;
+        fin.open(to_string(year)+"\\"+to_string(month)+"\\"+to_string(date)+".txt");
+        if(fin.eof()){ 
+            cout<<"No note"; 
+            return ;
+        }
+        while(getline(fin, line)){
+        cout<<line<<endl;
+        }
+        fin.close();
+    }
+
+   void printMonth(){
         if(!(month>=1 && month<=12)){
             cout<<"Invalid Month";
             return ;
@@ -95,36 +112,56 @@ class Calender{
             cout<<"\t";
         }
         for(int j = 1; j<=getNumberOfDays(month, year); j++){
-            if(((j+firstDay-2)%7==0) && (j!=1))
+            if(((j+firstDay-2)%7==0) ) //j!=1
                 cout<<endl;
             cout<<j<<"\t";
         }
         cout<<endl;
         cout<<"----------------------------------------------------\n";
+        
     }
+
+
 
     void addnote(){
-    
-    string line;
-    ofstream fout;
-    fout.open("note.txt");
-    cout<<"Enter date (DD MM YYYY) : ";
-    cin>>date>>month>>year;
-    fout<<date<<" ";
-    printDate();
-    cout<<endl;
-    while(fout){
-        getline(cin, line);
-        fout<<line;
-        if(line == ".")
-        break;
-    }
-    cout<<"note saved successfully";
-    fout.close();
+        string line;
+        ofstream fout;
+        // cout<<"Enter date (DD MM YYYY) : ";
+        // cin>>date>>month>>year;
+        fout.open(to_string(year)+"\\"+to_string(month)+"\\"+to_string(date)+".txt", ios::app );
+        fout<<date<<"."<<month<<"."<<year<<endl;
+        cout<<"Enter the note\n";
+        while(fout){
+            getline(cin, line);
+            fout<<line;
+            if(line == ".")
+            break;
+        }
+        cout<<"note saved successfully";
+        fout.close();
 
     }
 
+    void increase_month(){
+        ++month;
+        if(month>12){
+            ++year;
+            month = month - 12;
+        }
+    }
+
+    void decrease_month(){
+        --month;
+        if(month<1){
+            if(year<1600){
+                cout<<"No record available";
+                return ;
+            }
+            month = month + 12;
+        }
+    }
 };
+
 
 int checkLeapYear(int year){
     if(year%400 == 0 || (year%100 != 0 && year%4 == 0)){
@@ -148,7 +185,7 @@ int getNumberOfDays(int month, int year){
             return 31;
         }
     }
-    else{
+    else if(month>7){
         if(month%2 == 0){
             return 31;
         }
@@ -158,18 +195,6 @@ int getNumberOfDays(int month, int year){
     }
 }
 
-void showNote(){
-    string line;
-    ifstream fin;
-    fin.open("note.txt");
-    while(getline(fin, line)){
-        if(line==" "){
-            
-        }
-        cout<<line<<endl;
-    }
-    fin.close();
-}
 
 int main(){
     int choice;
@@ -182,8 +207,7 @@ int main(){
     cout<<"Press 4 to exit"<<endl;
     cout<<"Enter your choice"<<endl;
     cin>>choice;
-    switch (choice)
-    {
+    switch (choice){
     case 1:
         cout<<"Enter date (DD MM YYYY) : ";
         cin>>date>>month>>year;
@@ -194,28 +218,32 @@ int main(){
         cout<<"Enter month and year (MM YYYY) : ";
         cin>>month>>year;
         calender.setData(1, month, year);
+        calender.printMonth();
         while(ch != 'q'){
-            calender.printMonth();
-            cout<<"Press 'n' to Next, Press 'p' to Previous or Press 'q' to Quit"<<endl;
+            
+            cout<<"Press 'n' to Next, Press 'p' to Previous, Press 's' to show note or Press 'q' to Quit"<<endl;
             cin>>ch;
             if(ch=='n'){
-                //increase_month();
+                calender.increase_month();
                 calender.printMonth();
             }
             else if(ch=='p'){
-                //decrease_month();
+                calender.decrease_month();
                 calender.printMonth();
             }
             else if(ch=='s'){
-                showNote();
+                calender.showNote();
             }
         }
         break;
         case 3:
+        cout<<"Enter date (DD MM YYYY): ";
+        cin>>date>>month>>year;
+        calender.setData(date, month, year);
         calender.addnote();
         break;
-    default: 
-        ;
+        default: 
+           ;
     }
 }
     
