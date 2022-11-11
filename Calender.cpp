@@ -82,7 +82,7 @@ class Calender{
         string line;
         char c;
         ifstream fin;
-        fin.open(to_string(year)+"\\"+to_string(month)+"\\"+to_string(date)+".txt");
+        fin.open(to_string(year)+"\\"+to_string(month)+".txt");
         if(fin.eof()){ 
             cout<<"No note"; 
             return ;
@@ -128,7 +128,7 @@ class Calender{
         ofstream fout;
         // cout<<"Enter date (DD MM YYYY) : ";
         // cin>>date>>month>>year;
-        fout.open(to_string(year)+"\\"+to_string(month)+"\\"+to_string(date)+".txt", ios::app );
+        fout.open(to_string(year)+"\\"+to_string(month)+".txt", ios::app );
         fout<<date<<"."<<month<<"."<<year<<endl;
         cout<<"Enter the note\n";
         while(fout){
@@ -193,6 +193,7 @@ int getNumberOfDays(int month, int year){
             return 30;
         }
     }
+    return 0;
 }
 
 
@@ -200,7 +201,9 @@ int main(){
     int choice;
     int date, month, year;
     char ch = 'a';
+    char c;
     Calender calender;
+    do{
     cout<<"Press 1 to find out the day"<<endl;
     cout<<"Press 2 to print all the day of month"<<endl;
     cout<<"Press 3 to add note"<<endl;
@@ -245,5 +248,8 @@ int main(){
         default: 
            ;
     }
+    cout<<"\nDo you want to continue ? (y/n)"<<endl;
+    cin>>c;
+    }while(c=='y'|| c=='Y');
 }
     
