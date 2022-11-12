@@ -1,11 +1,8 @@
 #include<iostream>
 #include<fstream>
 #include<string>
-
-//#include"month.h"
-//#include "dayOfWeek.h"
-
 using namespace std;
+
 int getNumberOfDays(int , int);
 int getDayNumber(int, int ,int);
 class Calender{
@@ -13,16 +10,25 @@ class Calender{
     int month;
     int year;
     int firstDay;
+
     public:
     void setData(int date, int month, int year){
         this->date = date;
         this->month = month;
         this->year = year;
     }
-    int getDate(){ return this->date; }
-    int getMonth(){ return this->month; }
-    int getYear(){ return this->year; }
-    void setYear(){ this->year = this->year - 1000; }
+    int getDate(){ 
+        return this->date; 
+    }
+    int getMonth(){ 
+        return this->month; 
+    }
+    int getYear(){ 
+        return this->year; 
+    }
+    void setYear(){ 
+        this->year = this->year - 1000; 
+    }
 
     const char* Zellercongruence(){
     if (month == 1){
@@ -83,17 +89,17 @@ class Calender{
         char c;
         ifstream fin;
         fin.open(to_string(year)+"\\"+to_string(month)+".txt");
-        if(fin.eof()){ 
-            cout<<"No note"; 
+        if(!fin){ 
+            cout<<"No note"<<endl; 
             return ;
         }
         while(getline(fin, line)){
-        cout<<line<<endl;
+            cout<<line<<endl;
         }
         fin.close();
     }
 
-   void printMonth(){
+    void printMonth(){
         if(!(month>=1 && month<=12)){
             cout<<"Invalid Month";
             return ;
@@ -118,16 +124,11 @@ class Calender{
         }
         cout<<endl;
         cout<<"----------------------------------------------------\n";
-        
     }
-
-
 
     void addnote(){
         string line;
         ofstream fout;
-        // cout<<"Enter date (DD MM YYYY) : ";
-        // cin>>date>>month>>year;
         fout.open(to_string(year)+"\\"+to_string(month)+".txt", ios::app );
         fout<<date<<"."<<month<<"."<<year<<endl;
         cout<<"Enter the note\n";
@@ -139,7 +140,6 @@ class Calender{
         }
         cout<<"note saved successfully";
         fout.close();
-
     }
 
     void increase_month(){
@@ -196,7 +196,6 @@ int getNumberOfDays(int month, int year){
     return 0;
 }
 
-
 int main(){
     int choice;
     int date, month, year;
@@ -204,52 +203,56 @@ int main(){
     char c;
     Calender calender;
     do{
-    cout<<"Press 1 to find out the day"<<endl;
-    cout<<"Press 2 to print all the day of month"<<endl;
-    cout<<"Press 3 to add note"<<endl;
-    cout<<"Press 4 to exit"<<endl;
-    cout<<"Enter your choice"<<endl;
-    cin>>choice;
-    switch (choice){
-    case 1:
-        cout<<"Enter date (DD MM YYYY) : ";
-        cin>>date>>month>>year;
-        calender.setData(date, month, year);
-        cout<<"Day : "<<calender.Zellercongruence();
-        break;
-    case 2: 
-        cout<<"Enter month and year (MM YYYY) : ";
-        cin>>month>>year;
-        calender.setData(1, month, year);
-        calender.printMonth();
-        while(ch != 'q'){
-            
-            cout<<"Press 'n' to Next, Press 'p' to Previous, Press 's' to show note or Press 'q' to Quit"<<endl;
-            cin>>ch;
-            if(ch=='n'){
-                calender.increase_month();
+        cout<<"Press 1 to find out the day"<<endl;
+        cout<<"Press 2 to print all the day of month"<<endl;
+        cout<<"Press 3 to add note"<<endl;
+        cout<<"Press 4 to exit"<<endl;
+        cout<<"Enter your choice"<<endl;
+        cin>>choice;
+        switch (choice){
+            case 1:
+                cout<<"Enter date (DD MM YYYY) : ";
+                cin>>date>>month>>year;
+                calender.setData(date, month, year);
+                cout<<"Day : "<<calender.Zellercongruence();
+                break;
+            case 2: 
+                cout<<"Enter month and year (MM YYYY) : ";
+                cin>>month>>year;
+                calender.setData(1, month, year);
                 calender.printMonth();
-            }
-            else if(ch=='p'){
-                calender.decrease_month();
-                calender.printMonth();
-            }
-            else if(ch=='s'){
-                calender.showNote();
-            }
+                while(ch != 'q'){
+                    cout<<"Press 'n' to Next, Press 'p' to Previous, Press 's' to show note or Press 'q' to Quit"<<endl;
+                    cin>>ch;
+                    if(ch=='n'){
+                        calender.increase_month();
+                        calender.printMonth();
+                    }
+                    else if(ch=='p'){
+                        calender.decrease_month();
+                        calender.printMonth();
+                    }
+                    else if(ch=='s'){
+                        calender.showNote();
+                    }
+                }
+                break;
+            case 3:
+                cout<<"Enter date (DD MM YYYY): ";
+                cin>>date>>month>>year;
+                calender.setData(date, month, year);
+                calender.addnote();
+                break;
+            case 4: 
+                cout<<"Thankyou for using calender!!";
+                exit(0);
+                break;
+            default:   
+                cout<<"Wrong Choice"<<endl;
         }
-        break;
-        case 3:
-        cout<<"Enter date (DD MM YYYY): ";
-        cin>>date>>month>>year;
-        calender.setData(date, month, year);
-        calender.addnote();
-        break;
-        default: 
-           ;
-    }
-    cout<<"\nDo you want to continue ? (y/n)"<<endl;
-    cin>>c;
+        cout<<"\nDo you want to continue ? (y/n)"<<endl;
+        cin>>c;
+        if(c=='n'|| c=='N')
+            cout<<"Thankyou for using Calender!!";
     }while(c=='y'|| c=='Y');
 }
-    
