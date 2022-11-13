@@ -4,8 +4,7 @@
 using namespace std;
 
 int getNumberOfDays(int , int);
-int getDayNumber(int, int ,int);
-class Calender{
+class Calendar{
     int date;
     int month;
     int year;
@@ -26,10 +25,17 @@ class Calender{
     int getYear(){ 
         return this->year; 
     }
-    void setYear(){ 
-        this->year = this->year - 1000; 
-    }
 
+    /*
+    For the Gregorian calendar Zeller's Congruence rule is: 
+     h = q + 13 * (m + 1) / 5 + k + k / 4 + j / 4 + 5 * j
+     h is the day of the week (0 = Saturday, 1 = Sunday, 2 = Monday, …, 6 = Friday)
+     q is the day of the month
+     m is the month (3 = March, 4 = April, 5 = May, …, 14 = February)
+     K is the year of the century (year % 100).
+     J is the zero-based century (actually ⌊ year/100 ⌋)
+    */
+    
     const char* Zellercongruence(){
     if (month == 1){
         month = 13;
@@ -114,9 +120,16 @@ class Calender{
         cout<<"S\tM\tT\tW\tTh\tF\tS\n";
         cout<<"----------------------------------------------------"<<endl;
 
-        for(int i = 1; i < firstDay; i++){
+        if(firstDay==0){
+            for(int i=1; i < 7; i++)
             cout<<"\t";
         }
+        else{
+            for(int i = 1; i < firstDay; i++){
+            cout<<"\t";
+            }
+        }
+
         for(int j = 1; j<=getNumberOfDays(month, year); j++){
             if(((j+firstDay-2)%7==0) ) //j!=1
                 cout<<endl;
@@ -171,11 +184,11 @@ int checkLeapYear(int year){
 }
 
 int getNumberOfDays(int month, int year){
-    if (month<=7){
-        if(month%2 == 0 && month != 2) {
+    if (month<=7 ||  month == 13 || month == 14){
+        if(month%2 == 0 && month != 2 && month !=14) {
            return 30;
 	    }
-        else if (month == 2){
+        else if (month == 2 || month == 14){
             if(checkLeapYear(year)==1)
                 return 29;
             else
@@ -185,7 +198,7 @@ int getNumberOfDays(int month, int year){
             return 31;
         }
     }
-    else if(month>7){
+    else if(month>7 && month!=13 && month != 14){
         if(month%2 == 0){
             return 31;
         }
@@ -201,7 +214,7 @@ int main(){
     int date, month, year;
     char ch = 'a';
     char c;
-    Calender calender;
+    Calendar calendar;
     do{
         cout<<"Press 1 to find out the day"<<endl;
         cout<<"Press 2 to print all the day of month"<<endl;
@@ -213,41 +226,41 @@ int main(){
             case 1:
                 cout<<"Enter date (DD MM YYYY) : ";
                 cin>>date>>month>>year;
-                calender.setData(date, month, year);
-                cout<<"Day : "<<calender.Zellercongruence();
+                calendar.setData(date, month, year);
+                cout<<"Day : "<<calendar.Zellercongruence();
                 break;
             case 2: 
                 cout<<"Enter month and year (MM YYYY) : ";
                 cin>>month>>year;
-                calender.setData(1, month, year);
-                calender.printMonth();
+                calendar.setData(1, month, year);
+                calendar.printMonth();
                 while(ch != 'q'){
                     cout<<"Press 'n' to Next, Press 'p' to Previous, Press 's' to show note or Press 'q' to Quit"<<endl;
                     cin>>ch;
                     if(ch=='n'){
-                        calender.increase_month();
-                        calender.printMonth();
+                        calendar.increase_month();
+                        calendar.printMonth();
                     }
                     else if(ch=='p'){
-                        calender.decrease_month();
-                        calender.printMonth();
+                        calendar.decrease_month();
+                        calendar.printMonth();
                     }
                     else if(ch=='s'){
-                        calender.showNote();
+                        calendar.showNote();
                     }
                 }
                 break;
             case 3:
                 cout<<"Enter date (DD MM YYYY): ";
                 cin>>date>>month>>year;
-                calender.setData(date, month, year);
-                calender.addnote();
+                calendar.setData(date, month, year);
+                calendar.addnote();
                 break;
-            case 4: 
+            case 4:
                 cout<<"Thankyou for using calender!!";
                 exit(0);
                 break;
-            default:   
+            default:
                 cout<<"Wrong Choice"<<endl;
         }
         cout<<"\nDo you want to continue ? (y/n)"<<endl;
@@ -255,4 +268,5 @@ int main(){
         if(c=='n'|| c=='N')
             cout<<"Thankyou for using Calender!!";
     }while(c=='y'|| c=='Y');
+    return 0;
 }
